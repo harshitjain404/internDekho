@@ -1,0 +1,52 @@
+[debug] [2025-03-20T08:53:06.318Z] ----------------------------------------------------------------------
+[debug] [2025-03-20T08:53:06.323Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ADMIN\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2025-03-20T08:53:06.324Z] CLI Version:   13.34.0
+[debug] [2025-03-20T08:53:06.324Z] Platform:      win32
+[debug] [2025-03-20T08:53:06.325Z] Node Version:  v18.17.1
+[debug] [2025-03-20T08:53:06.335Z] Time:          Thu Mar 20 2025 14:23:06 GMT+0530 (India Standard Time)
+[debug] [2025-03-20T08:53:06.336Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-03-20T08:53:06.345Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2025-03-20T08:53:06.457Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-03-20T08:53:06.458Z] > authorizing via signed-in user (harshit.madrecha@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  E:\intern-dekho-main
+
+[debug] [2025-03-20T08:53:07.166Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2025-03-20T08:53:07.167Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2025-03-20T08:57:47.717Z] ----------------------------------------------------------------------
+[debug] [2025-03-20T08:57:47.720Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ADMIN\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2025-03-20T08:57:47.721Z] CLI Version:   13.34.0
+[debug] [2025-03-20T08:57:47.722Z] Platform:      win32
+[debug] [2025-03-20T08:57:47.722Z] Node Version:  v18.17.1
+[debug] [2025-03-20T08:57:47.723Z] Time:          Thu Mar 20 2025 14:27:47 GMT+0530 (India Standard Time)
+[debug] [2025-03-20T08:57:47.723Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-03-20T08:57:47.737Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-03-20T08:57:47.740Z] > authorizing via signed-in user (harshit.madrecha@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  E:\intern-dekho-main
+
