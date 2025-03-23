@@ -1,127 +1,9 @@
-
-
-// import React, { useState, useEffect } from "react";
-// import { auth, db } from "./firebaseConfig";
-// import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-// import { collection, addDoc, getDocs } from "firebase/firestore";
-// import { useNavigate } from "react-router-dom";
-
-// const EmployerPage = () => {
-//     let navigate = useNavigate();
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [isLogin, setIsLogin] = useState(true);
-//   const [internships, setInternships] = useState([]);
-//   const [newInternship, setNewInternship] = useState({ title: "", description: "" });
-
-//   useEffect(() => {
-//     fetchInternships();
-//   }, []);
-
-//   const fetchInternships = async () => {
-//     const querySnapshot = await getDocs(collection(db, "internships"));
-//     const internshipsData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-//     setInternships(internshipsData);
-//   };
-
-
-//   const handleAuth = async () => {
-//     try {
-//       if (isLogin) {
-//         await signInWithEmailAndPassword(auth, email, password);
-// navigate("/employer-dashboard");
-//       } else {
-//         // ✅ Ensure auth is defined before calling
-//         if (!auth) {
-//           console.error("Firebase auth is not initialized");
-//           return;
-//         }
-//         await createUserWithEmailAndPassword(auth, email, password);
-//       }
-//       alert("Authentication successful!");
-//     } catch (error) {
-//       console.error("Auth Error:", error);
-//       alert(error.message);
-//     }
-//   };
-
-
-//   return (
-//     <div className="min-h-screen bg-gray-100  p-6">
-//       {/* Header */}
-//           <div className="EmployerPage"
-//         style={{
-//           marginTop: "5vh",
-//           display: "flex",
-//           flexDirection: "row",
-//           justifyContent: "space-between",
-//                }}>
-//         <div
-//           className="EmployerPagedetails"
-//           style={{
-//             margin: "auto"
-            
-//           }}
-//         >
-          
-//         <h1 className="text-7xl  text-gray-800">Hire the Best Interns</h1>
-//         <p className="text-4xl text-gray-600 mt-2">Post internships for free and find top talent!</p>
-//         <img
-//           className=""
-//           src="https://i.pinimg.com/736x/88/d5/90/88d5900c72c7d0169b09b0ef3bb155d8.jpg"
-//             alt="Hiring"
-//             style={{
-//               height: "40vh",
-//               marginTop:"2vh",
-//             }}
-//           />
-
-//         </div>
-//         {/* Authentication Form */}
-//         <div
-//           className=""
-//           style={{
-//             margin : "auto"
-//             }}
-//         >
-//         <h2 className="text-xl font-bold text-gray-700">{isLogin ? "Employer Login" : "Sign Up"}</h2>
-//         <input
-//           type="email"
-//           placeholder="Email"
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//           className="w-full border rounded-lg p-2 mt-2"
-//         />
-//         <input
-//           type="password"
-//           placeholder="Password"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//           className="w-full border rounded-lg p-2 mt-2"
-//         />
-//         <button
-//           onClick={handleAuth}
-//           className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold p-2 mt-4 rounded-lg"
-//         >
-//           {isLogin ? "Login" : "Sign Up"}
-//         </button>
-//         <button onClick={() => setIsLogin(!isLogin)} className="mt-2 text-blue-500">
-//           {isLogin ? "Switch to Sign Up" : "Switch to Login"}
-//             </button>
-            
-//           </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default EmployerPage;
-
 import React, { useState, useEffect } from "react";
 import { auth, db } from "./firebaseConfig";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
 
 const EmployerPage = () => {
     let navigate = useNavigate();
@@ -178,7 +60,26 @@ const EmployerPage = () => {
             alert(error.message);
         }
     };
-
+    const SignOut = async () => {
+        // const navigate = useNavigate();
+      alert("Signing out...");
+        try {
+          await signOut(auth); // Firebase sign-out
+          alert("Successfully signed out!");
+          navigate("/"); // Redirect to login page after sign-out
+        } catch (error) {
+          console.error("Sign Out Error:", error);
+          alert("Error signing out. Please try again.");
+        }
+      };
+      const handleClick = () => {
+        const user = auth.currentUser; // Get the current logged-in user
+        if (user) {
+          navigate("/employer-dashboard"); // Redirect to dashboard if logged in
+        } else {
+        alert("Please Sign in to Post InternShip")// Redirect to login if not logged in
+        }
+      };
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             {/* Header Section */}
@@ -214,12 +115,14 @@ const EmployerPage = () => {
               textAlign: "center",
               padding: '2vh',
               marginTop: "10vh" ,
-              fontSize: "1rem"
+              fontSize: "1rem",
+              borderRadius: "10px",
+              boxShadow: "0 0 10px 0 rgba(0,0,0,0.1)"
             }}
             className="bg-white shadow-lg p-6 rounded-lg w-full max-w-md">
-            <h2 className="text-4xl font-semibold text-gray-700 mb-4">
-              {isLogin ? "Employer Login" : "Employer Sign Up"}
-            </h2>
+                <h2 className="text-4xl font-semibold text-gray-700 mb-4">
+                {isLogin ? "Employer Login" : "Employer Sign Up"}
+                </h2>
 
                     {!isLogin && (
                         <>
@@ -276,6 +179,121 @@ const EmployerPage = () => {
                     >
                         {isLogin ? "Switch to Sign Up" : "Switch to Login"}
                     </button>
+                </div>
+            </div>
+            <div className="employer-details-sec">
+                <div className="employer-details"
+                    style={{
+                        margin: "auto",
+                        padding: '2vh',
+                        marginTop: "10vh" ,
+                        fontSize: "1rem",
+                        
+                    }}
+                >
+                    <h1 className="text-5xl font-bold text-gray-800">Why Post Internships On InternDekho</h1>
+                    <p className="text-2xl text-gray-600 mt-2">
+                        Post your intern requirements & Build Your Dream Team
+                    </p>
+                </div>
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent:"space-around",
+                        padding: '2vh',
+                        marginTop: "10vh" ,
+                        fontSize: "1rem",
+                        width: "80vw",
+                        height: "20vh",
+                        margin: "auto",
+                        borderRadius: "10px",
+                        boxShadow: "0 0 10px 0 rgba(0,0,0,0.5)",
+                        
+                }}
+                >
+                   <div>
+                        <h3
+                            style={{
+                                fontSize: "2.5rem",
+                                color: "#fb923c"
+                        }}
+                        >10K +</h3>
+                        <h5
+                        style={{
+                            fontSize: "1.5rem",
+                         
+                    }}>Candidates Looking for InternShips</h5>
+                    </div>
+                    <div>
+                        <h3
+                            style={{
+                                fontSize: "2.5rem",
+                                   color: "#fb923c"
+                        }}>1K +</h3>
+                        <h5
+                        style={{
+                            fontSize: "1.5rem",
+                            
+                    }}>Interns Hired</h5>
+                    </div> 
+                    <div>
+                        <h3
+                            style={{
+                                fontSize: "2.5rem",
+                                   color: "#fb923c"
+                        }}>100+</h3>
+                        <h5
+                        style={{
+                            fontSize: "1.5rem",
+                 
+                    }}>Job Profiles</h5>
+                    </div>
+                    <div>
+                        <h3
+                          style={{
+                                fontSize: "2.5rem",
+                                 color: "#fb923c"
+                        }}>3K+</h3>
+                        <h5
+                        style={{
+                            fontSize: "1.5rem",
+                   
+                    }}>Companies Hiring for Interns</h5>
+                    </div>
+                </div>
+                <div
+                    style={{
+                        width: "90vw",      
+                        margin: "auto",
+                        padding: '5vh',
+                        marginTop: "2.5%",
+                        fontSize: "3rem",
+                        textAlign: "center",
+                        borderRadius: "10px",
+                        boxShadow: "0 0 10px 0 rgba(0,0,0,0.5)",
+                        backgroundColor: "#fb923c", 
+                        color: "white",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-around",
+                    }} 
+                    
+                >
+                    <h2>Start Posting Internships NOW </h2>
+                     
+                    <button
+                        style={{
+                            padding: "1vh 2vh",
+                            fontSize: "1.5rem",
+                            backgroundColor: "#2563eb",
+                            color: "white",
+                            borderRadius: "10px",
+                            border: "none",
+
+                        }}
+                        onClick={() => handleClick()}
+                    >POST FOR FREE</button>
                 </div>
             </div>
         </div>
