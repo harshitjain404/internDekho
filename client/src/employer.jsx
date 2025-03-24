@@ -4,8 +4,11 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "fire
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
+import EmployerNavbar from "./Components/employernavbar";
+import LoginModal from "./Components/LoginModal";
 
 const EmployerPage = () => {
+      const [isModalOpen, setModalOpen] = useState(false);
     let navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
@@ -81,6 +84,9 @@ const EmployerPage = () => {
         }
       };
     return (
+        <>
+           <EmployerNavbar setModalOpen={setModalOpen} />
+           <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
         <div className="min-h-screen bg-gray-100 p-6">
             {/* Header Section */}
         <div
@@ -296,7 +302,8 @@ const EmployerPage = () => {
                     >POST FOR FREE</button>
                 </div>
             </div>
-        </div>
+            </div>
+            </>
     );
 };
 

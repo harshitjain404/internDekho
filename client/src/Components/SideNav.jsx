@@ -6,8 +6,16 @@ import { collection, addDoc, getFirestore, getDocs } from "firebase/firestore";
 import {app} from "../utils/firebase";
 import MultiSelect from "react-multiple-select-dropdown-lite";
 import "react-multiple-select-dropdown-lite/dist/index.css";
+import LoginModal from "./LoginModal";
+import Navbar from "./Navbar";
+
+
 // import data from "./browseAll.json";
 const SideNav = () => {
+
+
+  const [isModalOpen, setModalOpen] = useState(false);
+  
   const data = [
     {
       "site": "Internshala",
@@ -9276,6 +9284,12 @@ const SideNav = () => {
   }, [multipleSelectValuesOptionLocation]);
 
   return (
+
+    <>
+
+       <Navbar setModalOpen={setModalOpen} />
+      <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      
     <div className="pt-6  md:pl-20 md:pr-20 pr-3 pl-3">
       <div>
         <div className="text-2xl md:text-3xl  font-medium">
@@ -9435,6 +9449,7 @@ const SideNav = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -1,8 +1,19 @@
-import React from 'react'
+// import "./index.css";
+import React, { useState } from "react";
+import Navbar from "./Navbar";
+import LoginModal from "./LoginModal";
 
 const Home = () => {
-  return (
-    <div className="flex justify-center items-center" style={{height:"78vh"}}>
+
+    const [isModalOpen, setModalOpen] = useState(false);
+    
+    return (
+        <>
+           <Navbar setModalOpen={setModalOpen} />
+            <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+                     
+        <div className="flex justify-center items-center" style={{ height: "78vh" }}>
+            
         <div className='flex flex-col md:flex-row justify-center items-center md:px-20 md:pt-10 gap-7 ' id="header">
             <div className='basis-1/2 flex justify-center items-center order-2 md:order-1'>
                 <div className=' flex justify-center items-center flex-col w-72 text-3xl md:text-4xl font-strong' style={{color:"#363636",}}>
@@ -44,8 +55,10 @@ const Home = () => {
                 <hr/>
             </div>
         </section> */}
-        {/* logos start */}
-    </div>
+                {/* logos start */}
+                
+            </div>
+    </>
   )
 }
 

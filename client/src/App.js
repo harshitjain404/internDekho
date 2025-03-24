@@ -8,7 +8,7 @@ import { Route, Routes } from "react-router-dom";
 import Employer from "./employer";
 import EmployerDashboard from "./employer-dashboard";
 import LoginModal from "./Components/LoginModal";
-
+import EmployerPricing  from "./employer-pricing"
 
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
   return (
     <div className="App">
       {/* <Navbar /> */}
-      <Navbar setModalOpen={setModalOpen} />
+      {/* <Navbar setModalOpen={setModalOpen} /> */}
             <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
             
       <div >
@@ -26,7 +26,8 @@ function App() {
             <Route path="/" element={<Home />} />
           <Route path="/internships" element={<SideNav />} />        
           <Route path="/employer" element={<Employer />} /> 
-          <Route path="/employer-dashboard" element={<EmployerDashboard />} /> 
+          <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+          <Route path="/plans-pricing" element={<EmployerPricing />} /> 
       </Routes>
       </div>
       <Footer/>
