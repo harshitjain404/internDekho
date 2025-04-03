@@ -143,7 +143,9 @@ const Navbar = ({ setModalOpen }) => {
         )}
 
         {!user ? (
-          <button onClick={() => setModalOpen(true)} className="cursor-pointer text-lg hover:bg-orange-400 bg-navOrange rounded-md px-4 py-1">
+          <button
+            onClick={() => setModalOpen(true)}
+            className="cursor-pointer text-lg hover:bg-orange-400 bg-navOrange rounded-md px-4 py-1">
             Login
           </button>
         ) : (

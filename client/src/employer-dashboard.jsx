@@ -1,332 +1,141 @@
 
 
-import React, { useState } from "react";
-import { db } from "./firebaseConfig"; // Import Firebase Firestore
-import { collection, addDoc } from "firebase/firestore";
-
+import React,{useState , useEffect} from "react";
 import EmployerNavbar from "./Components/employernavbar";
 import LoginModal from "./Components/LoginModal";
+import FetchInternship from "./fetchInternships";
+import { db } from "./firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
+import EditInternshipModal from "./editinternship"; 
 
-
-const InternshipForm = () => {
-
-      const [isModalOpen, setModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    profile: "",
-    skills: "",
-    type: "In office",
-    time: "Full-time",
-    openings: "",
-    startDate: "Immediate",
-    duration: "",
-    responsibilities: "",
-    preferences: "",
-    stipend: "Paid",
-    minStipend: "",
-    maxStipend: "",
-    incentivesMin: "",
-    incentivesMax: "",
-    perks: [],
-    ppo: false,
-    availability: "",
-    contactNumber: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
-      setFormData((prev) => ({
-        ...prev,
-        perks: checked ? [...prev.perks, value] : prev.perks.filter((p) => p !== value),
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
+const EmployerDashboard = () => {
+    
+  const [isModalOpen, setModalOpen] = useState(false);
+  
+  const [internships, setInternships] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedInternship, setSelectedInternship] = useState(null);
+  const [editOpen, setEditOpen] = useState(false);
+  const handleEditClick = (internship) => {
+    setSelectedInternship(internship);
+    setEditOpen(true);
   };
-  const [loading, setLoading] = useState(false);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      await addDoc(collection(db, "internships"), formData);
-      alert("Internship posted successfully!");
-      setFormData({
-        profile: "",
-        skills: "",
-        type: "In office",
-        time: "Full-time",
-        openings: "",
-        startDate: "Immediate",
-        duration: "",
-        responsibilities: "",
-        preferences: "",
-        stipend: "Paid",
-        minStipend: "",
-        maxStipend: "",
-        incentivesMin: "",
-        incentivesMax: "",
-        perks: [],
-        ppo: false,
-        availability: "",
-        contactNumber: "",
-      });
-    } catch (error) {
-      console.error("Error adding document: ", error);
-      alert("Failed to post internship. Try again.");
-      setFormData({
-        profile: "",
-        skills: "",
-        type: "In office",
-        time: "Full-time",
-        openings: "",
-        startDate: "Immediate",
-        duration: "",
-        responsibilities: "",
-        preferences: "",
-        stipend: "Paid",
-        minStipend: "",
-        maxStipend: "",
-        incentivesMin: "",
-        incentivesMax: "",
-        perks: [],
-        ppo: false,
-        availability: "",
-        contactNumber: "",
-      });
-    }
-
-    setLoading(false);
+  
+  const handleSaveChanges = (updatedInternship) => {
+    setInternships((prev) =>
+      prev.map((internship) =>
+        internship.id === updatedInternship.id ? updatedInternship : internship
+      )
+    );
   };
-
-  return (
-    <>
-      <EmployerNavbar setModalOpen={setModalOpen} />
-      <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
-    <div
-      style={{
-        height: "100%",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.5)",
-        borderRadius: "10px",
-        marginTop: "10vh",
-        padding: "20px",
-      }}
-      className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-      <h2
+  
+    useEffect(() => {
+      const fetchInternships = async () => {
+        try {
+          const querySnapshot = await getDocs(collection(db, "internships"));
+          const internshipData = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          setInternships(internshipData);
+        } catch (error) {
+          console.error("Error fetching internships: ", error);
+        }
+        setLoading(false);
+      };
+  
+      fetchInternships();
+    }, []);
+  
+    if (loading) {
+      return <p className="text-center text-lg font-semibold">Loading internships...</p>;
+    }
+  console.log(internships);
+    return (
+      <div
         style={{
-          // display: "inline-block",
-          fontSize: "3.5rem",
-          textAlign: "center",
-          marginBottom: "10vh",
-          
+          height: "100vh",
+          margin: "auto",
         }}
-        className="text-2xl font-bold mb-4">Internship Details</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Internship Profile */}
-        <label className="block">
-          <span className="">Internship Profile</span>
-          <input
-            type="text"
-            name="profile"
-            value={formData.profile}
-            onChange={handleChange}
-            className="w-full p-2 border rounded mt-1"
-            placeholder="e.g. Android App Development"
-            required
-          />
-        </label>
-
-        {/* Skills Required */}
-        <label className="block">
-          <span className="">Skills Required</span>
-          <input
-            type="text"
-            name="skills"
-            value={formData.skills}
-            onChange={handleChange}
-            className="w-full p-2 border rounded mt-1"
-            placeholder="e.g. Java, React"
-          />
-        </label>
-
-        {/* Internship Type */}
-        <fieldset>
-          <span className="">Internship Type</span>
-          <div className="flex space-x-4">
-            {["In office", "Hybrid", "Remote"].map((option) => (
-              <label key={option}>
-                <input
-                  type="radio"
-                  name="type"
-                  value={option}
-                  checked={formData.type === option}
-                  onChange={handleChange}
-                />
-                {option}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        {/* Part-time / Full-time */}
-        <fieldset>
-          <span className="">Part-time/Full-time</span>
-          <div className="flex space-x-4">
-            {["Part-time", "Full-time"].map((option) => (
-              <label key={option}>
-                <input
-                  type="radio"
-                  name="time"
-                  value={option}
-                  checked={formData.time === option}
-                  onChange={handleChange}
-                />
-                {option}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        {/* Number of Openings */}
-        <label className="block">
-          <span className="">Number of Openings</span>
-          <input
-            type="number"
-            name="openings"
-            value={formData.openings}
-            onChange={handleChange}
-            className="w-full p-2 border rounded mt-1"
-            placeholder="e.g. 4"
-          />
-        </label>
-
-        {/* Internship Start Date */}
-        <fieldset>
-          <span className="">Internship Start Date</span>
-          <div className="flex space-x-4">
-            {["Immediate", "Later"].map((option) => (
-              <label key={option}>
-                <input
-                  type="radio"
-                  name="startDate"
-                  value={option}
-                  checked={formData.startDate === option}
-                  onChange={handleChange}
-                />
-                {option}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        {/* Internship Duration */}
-        <label className="block">
-          <span className="">Internship Duration</span>
-          <input
-            type="text"
-            name="duration"
-            value={formData.duration}
-            onChange={handleChange}
-            className="w-full p-2 border rounded mt-1"
-            placeholder="e.g. 3 months"
-          />
-        </label>
-
-        {/* Stipend */}
-        <fieldset>
-          <span className="">Stipend</span>
-          <div className="flex space-x-4">
-            {["Paid", "Unpaid"].map((option) => (
-              <label key={option}>
-                <input
-                  type="radio"
-                  name="stipend"
-                  value={option}
-                  checked={formData.stipend === option}
-                  onChange={handleChange}
-                />
-                {option}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        {/* Fixed Stipend */}
-        {formData.stipend === "Paid" && (
-          <div className="flex space-x-4">
-            <input
-              type="number"
-              name="minStipend"
-              value={formData.minStipend}
-              onChange={handleChange}
-              className="w-1/2 p-2 border rounded mt-1"
-              placeholder="Min ₹"
-            />
-            <input
-              type="number"
-              name="maxStipend"
-              value={formData.maxStipend}
-              onChange={handleChange}
-              className="w-1/2 p-2 border rounded mt-1"
-              placeholder="Max ₹"
-            />
-          </div>
-        )}
-
-        {/* Perks */}
-        <fieldset>
-          <span className="">Perks</span>
-          <div className="flex flex-wrap gap-4">
-            {["Certificate", "Letter of recommendation", "Flexible work hours", "Free snacks & beverages"].map((perk) => (
-              <label key={perk}>
-                <input
-                  type="checkbox"
-                  name="perks"
-                  value={perk}
-                  checked={formData.perks.includes(perk)}
-                  onChange={handleChange}
-                />
-                {perk}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        {/* PPO */}
-        <label className="block">
-          <input
-            type="checkbox"
-            name="ppo"
-            checked={formData.ppo}
-            onChange={(e) => setFormData({ ...formData, ppo: e.target.checked })}
-          />
-          <span className="ml-2">Does this internship come with a pre-placement offer (PPO)?</span>
-        </label>
-
-        {/* Contact Info */}
-        <label className="block">
-          <span className="">Alternate Mobile Number</span>
-          <input
-            type="text"
-            name="contactNumber"
-            value={formData.contactNumber}
-            onChange={handleChange}
-            className="w-full p-2 border rounded mt-1"
-            placeholder="+91 9876543210"
-          />
-        </label>
-
-        {/* Submit Button */}
-        <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600">
-          Post Internship
+      >
+         <EmployerNavbar setModalOpen={setModalOpen} />
+         <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+    <div className="bg-gray-50  p-6">
+      {/* Top Banner */}
+      <div
+                    style={{
+                        width: "80%",
+                        margin: "auto",
+                        fontSize: "30px",
+                    }}
+                    className="bg-blue-500 text-white p-4 rounded-lg flex justify-between items-center">
+        <div>
+          <h2 className="text-lg font-semibold">
+            Free Job Post Added to your Account!
+          </h2>
+          <p className="text-sm">Don't miss out! 30Mn+ job-ready candidates await.</p>
+        </div>
+            <button
+              style={{
+                backgroundColor: "#fb923c ",
+        }}
+              className=" font-semibold px-4 py-2 rounded-lg">
+          Post InterShip for Free
         </button>
-      </form>
       </div>
-      </>
+
+      {/* Info Box */}
+                <div
+        style={{
+            width: "80%",
+            margin: "auto",
+            borderRadius: "10px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            marginTop: "20px",
+            padding: "20px",
+                        
+            
+                    }}
+                    className="bg-white p-4 mt-4 rounded-lg shadow">
+        <p className="text-md">
+          Post unlimited listings and get access to features like boosted visibility, 
+          applicant contact numbers, etc., with <b>InternDekho Premium</b>. 
+                        <a href="/plans-pricing" className="">
+            View Premium Plans now
+          </a>
+        </p>
+      </div>
+          <h2 style={{ 
+            marginTop: "20px",
+            marginBottom: "20px",
+            fontSize: "2rem",
+            fontWeight: "bold",
+            textAlign: "center",
+            color: "#fb923c ",
+          }}>
+              Your Posted Internships
+            </h2>
+
+      {/* Tab Navigation */}
+                <div
+                   
+                   style={{
+                    width: "80%",
+                        margin: "auto",
+                        fontSize: "2rem",
+                        marginTop: "20px",
+                        textAlign: "center",
+                    }}
+                    className="flex mt-6 border-b">
+        <button className="pb-2 px-4 font-medium border-b-2 border-blue-500 text-blue-500">
+          Internships
+        </button>
+        <button className="pb-2 px-4 font-medium text-gray-500">Jobs</button>
+      </div>
+
+      {/* Job Listing Table */}
+          
+            </div>
+<FetchInternship/>
+      </div> 
   );
 };
 
-export default InternshipForm;
+export default EmployerDashboard;
