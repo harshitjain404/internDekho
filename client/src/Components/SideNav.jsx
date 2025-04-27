@@ -9265,7 +9265,7 @@ const SideNav = () => {
 
   const filterInternships = async () => {
     let _locations = multipleSelectValuesOptionLocation.split(",");
-    console.log(_locations);
+    // console.log(_locations);
     if (_locations.length === 1 && _locations[0] === "") {
       setInternships(saveInternships);
       return;
@@ -9348,7 +9348,7 @@ const SideNav = () => {
           >
             Naukri
           </div>
-          <div
+          {/* <div
             className=" hover:bg-navOrange text-base p-2 rounded-md font-medium cursor-pointer"
             onClick={() => {
               setSidenav(6);
@@ -9357,7 +9357,7 @@ const SideNav = () => {
             style={{ backgroundColor: sidenav === 6 ? "#F6A92E" : "white" }}
           >
             Saved Internships
-          </div>
+          </div> */}
         </div>
         <div>Total internships found : {internships.length}</div>
       </div>

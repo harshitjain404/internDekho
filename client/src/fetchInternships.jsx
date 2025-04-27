@@ -11,23 +11,23 @@ import EditInternshipModal from "./editinternship"; // Adjust the import path as
 
 const FetchInternships = () => {
   const [internships, setInternships] = useState([]);
- const [isModalOpen, setModalOpen] = useState(false);
-
-    const [loading, setLoading] = useState(true);
-    const [selectedInternship, setSelectedInternship] = useState(null);
-  const [editOpen, setEditOpen] = useState(false);
+ 
+  const [editingInternship, setEditingInternship] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  
   const handleEditClick = (internship) => {
-    setSelectedInternship(internship);
-    setEditOpen(true);
+    setEditingInternship(internship);
+    setModalOpen(true);
   };
   
   const handleSaveChanges = (updatedInternship) => {
     setInternships((prev) =>
-      prev.map((internship) =>
-        internship.id === updatedInternship.id ? updatedInternship : internship
+      prev.map((item) =>
+        item.id === updatedInternship.id ? updatedInternship : item
       )
     );
   };
+  // Fetch internships from Firestore  
 
   // Fetch internships
   useEffect(() => {
@@ -94,22 +94,15 @@ const FetchInternships = () => {
                 </TableCell>
                 <TableCell style={{  fontSize: "1rem" ,padding: "10px", color: "#333" }}>{internship.duration}</TableCell>
                 <TableCell style={{ fontSize: "1rem" , padding: "10px" }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleEditClick(internship)}
-                    style={{ marginRight: "8px", padding: "6px 12px" }}
-                  >
-                    Edit
-                  </Button>
+                <Button onClick={() => handleEditClick(internship)}>Edit</Button>
+
                   
-<EditInternshipModal
-  internship={selectedInternship}
-  open={editOpen}
-  onClose={() => setEditOpen(false)}
+                <EditInternshipModal
+  open={modalOpen}
+  internship={editingInternship}
+  onClose={() => setModalOpen(false)}
   onSave={handleSaveChanges}
-/>;
-                  <Button
+/>            <Button
                     variant="contained"
                     color="error"
                     onClick={() => handleDelete(internship.id)}

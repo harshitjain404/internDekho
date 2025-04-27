@@ -2,11 +2,11 @@
 
 import React,{useState , useEffect} from "react";
 import EmployerNavbar from "./Components/employernavbar";
-import LoginModal from "./Components/LoginModal";
+  import LoginModal from "./Components/LoginModal";
 import FetchInternship from "./fetchInternships";
 import { db } from "./firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
-import EditInternshipModal from "./editinternship"; 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const EmployerDashboard = () => {
     
@@ -14,20 +14,19 @@ const EmployerDashboard = () => {
   
   const [internships, setInternships] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedInternship, setSelectedInternship] = useState(null);
-  const [editOpen, setEditOpen] = useState(false);
-  const handleEditClick = (internship) => {
-    setSelectedInternship(internship);
-    setEditOpen(true);
-  };
+   const [user, setUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
   
-  const handleSaveChanges = (updatedInternship) => {
-    setInternships((prev) =>
-      prev.map((internship) =>
-        internship.id === updatedInternship.id ? updatedInternship : internship
-      )
-    );
-  };
+   useEffect(() => {
+     const auth = getAuth();
+     const unsubscribe = onAuthStateChanged(auth, (user) => {
+       setUser(user);
+      //  console.log(user.email)  
+       setAuthChecked(true);
+     });
+     return () => unsubscribe();
+   }, []);
+  
   
     useEffect(() => {
       const fetchInternships = async () => {
@@ -47,7 +46,41 @@ const EmployerDashboard = () => {
     if (loading) {
       return <p className="text-center text-lg font-semibold">Loading internships...</p>;
     }
-  console.log(internships);
+
+  
+  if (!user) {
+ 
+      return <div>
+        <EmployerNavbar setModalOpen={setModalOpen} />
+        <LoginModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+  
+        <div style={{
+          textAlign: "center",
+          height: "80vh",
+          color: "red",
+          margin: "auto",
+          alignItems: "center",
+          
+        }}>You must be logged in to view Dashboard.
+           <button
+            style={{
+              marginTop: "20px",
+              padding: "10px 20px",
+              backgroundColor: "red",
+              color: "#fff",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+            onClick={() => setModalOpen(true)}
+          >
+            Employer Login
+          </button>
+
+        </div>;
+        </div>
+    }
+  
     return (
       <div
         style={{
@@ -86,18 +119,21 @@ const EmployerDashboard = () => {
         style={{
             width: "80%",
             margin: "auto",
-            borderRadius: "10px",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
             marginTop: "20px",
             padding: "20px",
                         
             
                     }}
-                    className="bg-white p-4 mt-4 rounded-lg shadow">
+                    className="bg-white p-4 mt-4 rounded-lg ">
         <p className="text-md">
           Post unlimited listings and get access to features like boosted visibility, 
           applicant contact numbers, etc., with <b>InternDekho Premium</b>. 
-                        <a href="/plans-pricing" className="">
+              <a
+                style={{
+                  color: "#fb923c",
+                  fontWeight: "bold",
+                }}
+                href="/plans-pricing" className="">
             View Premium Plans now
           </a>
         </p>

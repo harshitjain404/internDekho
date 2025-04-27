@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+
 import {
   collection,
   addDoc,
@@ -10,9 +11,29 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import  {app} from "../firebaseConfig";
+import { app  , db} from "../firebaseConfig";
+import Swal from 'sweetalert2';
+
 const InternshipCard = (props) => {
-  const db = getFirestore(app);
+
+  const isUserLoggedIn = () => {
+    console.log("checking for user")
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log(JSON.parse(localStorage.getItem('user')))
+    if (user) {
+      return true;
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Not Logged In',
+        text: 'Please log in to save internships!',
+        confirmButtonColor: 'black', // orange button like your theme
+      });
+      return false;
+    }
+  };
+  
+
   const saveInternship = async (internship) => {
     let user = JSON.parse(localStorage.getItem("user"));
     if (user.email) {
@@ -55,15 +76,9 @@ const InternshipCard = (props) => {
                   fontSize: "45px",
                   color: "rgb(10,102,194)",
                   height: "50%",
-                  // height:"70px"
                 }}
               />
             </div>
-
-            {/* <LinkedInIcon
-              className=""
-              style={{ fontSize: "45px", color: "rgb(10,102,194)" }}
-            /> */}
           </div>
           <div className="flex flex-col gap-2 basis-6/7">
             <div className=" shadow-black-100  rounded-md p-1 md:pt-2 flex items-center justify-start font-strong text-xl  ">
@@ -103,16 +118,19 @@ const InternshipCard = (props) => {
                   className="text-navOrange cursor-pointer"
                   style={{ fontSize: "30px" }}
                   onClick={() => {
-                    setBookmark(1);
-                    saveInternship({
-                      title: props?.title,
-                      companyName: props?.companyName,
-                      location: props?.location,
-                      stipend: props?.stipend,
-                      description: props?.description,
-                      link: props?.link,
-                      site: props?.site,
-                    });
+                    if (isUserLoggedIn()) {
+
+                      setBookmark(1);
+                      saveInternship({
+                        title: props?.title,
+                        companyName: props?.companyName,
+                        location: props?.location,
+                        stipend: props?.stipend,
+                        description: props?.description,
+                        link: props?.link,
+                        site: props?.site,
+                      });
+                    }
                   }}
                 />
               )}

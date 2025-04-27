@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+
+
+import React, { useState, useEffect } from "react";
 import { db } from "./firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
 import Modal from "@mui/material/Modal";
@@ -7,20 +9,56 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
 const EditInternshipModal = ({ internship, open, onClose, onSave }) => {
-  const [formData, setFormData] = useState({ ...internship });
+  const [formData, setFormData] = useState({
+    id: "",
+    profile: "",
+    location: "",
+    stipend: "",
+    duration: "",
+  });
+
+  // Update form data when internship prop changes
+  useEffect(() => {
+    if (internship) {
+      setFormData({
+        id: internship.id || "",
+        profile: internship.profile || "",
+        location: internship.location || "",
+        stipend: internship.stipend || "",
+        duration: internship.duration || "",
+      });
+    }
+  }, [internship]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handleSubmit = async () => {
     try {
-      const internshipRef = doc(db, "internships", formData.id);
-      await updateDoc(internshipRef, formData);
+      const { id, profile, location, stipend, duration } = formData;
+
+      if (!id) {
+        console.error("Internship ID is missing.");
+        return;
+      }
+
+      const internshipRef = doc(db, "internships", id);
+      await updateDoc(internshipRef, {
+        profile,
+        location,
+        stipend,
+        duration,
+      });
+
+      console.log("Updated internship:", formData);
       onSave(formData);
       onClose();
     } catch (error) {
-      console.error("Error updating internship: ", error);
+      console.error("Error updating internship:", error);
     }
   };
 

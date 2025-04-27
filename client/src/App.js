@@ -52,6 +52,7 @@ import LoginModal from "./Components/LoginModal";
 import EmployerPricing from "./employer-pricing";
 import ProtectedRoute from "./Components/protectedroute";
 import EmployerDashboard from "./employer-dashboard";
+import StudentDashboard from "./studentDashboard";
 
 function App() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -74,6 +75,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/student" element={<StudentDashboard />} />
         <Route path="/internships" element={<SideNav />} />
         <Route path="/employer" element={<Employer />} />
         <Route path="/plans-pricing" element={<EmployerPricing />} />

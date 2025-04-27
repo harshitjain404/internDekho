@@ -240,14 +240,26 @@ import React, { useState, useEffect } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
-
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const EmployerNavbar = ({ setModalOpen }) => {
   const navigate = useNavigate();
   const [hamburger, setHamburger] = useState(false);
   const [user, setUser] = useState(null);
   const [userType, setUserType] = useState(null);
+    const [authChecked, setAuthChecked] = useState(false);
 
+
+
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          setUser(user);
+          setAuthChecked(true);
+        });
+        return () => unsubscribe();
+    }, []);
+  
   // 🔄 Load user on component mount + when localStorage changes
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -257,13 +269,17 @@ const EmployerNavbar = ({ setModalOpen }) => {
     }
   }, []); 
 
-  const logOutUser = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    setUserType(null);
-    alert("Logged Out");
-    navigate("/");
-  };
+   const handleSignout = () => {
+     const auth = getAuth();
+     auth.signOut().then(() => {
+       setUser(null);
+       localStorage.removeItem("user");
+       alert("Signed out successfully!");
+     }).catch((error) => {
+       console.error("Error signing out: ", error);
+       alert("Failed to sign out. Try again.");
+     });
+   };
 
   return (
     <div className="flex justify-between items-center p-4 shadow-lg bg-white">
@@ -296,7 +312,7 @@ const EmployerNavbar = ({ setModalOpen }) => {
             Login
           </button>
         ) : (
-          <button onClick={logOutUser} className="cursor-pointer text-lg hover:bg-orange-400 bg-navOrange rounded-md px-4 py-1">
+          <button onClick={handleSignout} className="cursor-pointer text-lg hover:bg-orange-400 bg-navOrange rounded-md px-4 py-1">
             Sign Out
           </button>
         )}

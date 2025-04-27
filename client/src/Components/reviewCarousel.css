@@ -1,0 +1,113 @@
+.reviews-carousel-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f0f6ff;
+    padding: 40px 60px;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    margin:5% 0;
+  }
+  
+  .left-section {
+    width: 40%;
+  }
+  
+  .left-section h2 {
+    font-size: 24px;
+    margin: 20px 0;
+    font-weight: bold;
+    color: #002f5f;
+  }
+  
+  .quote-icon {
+    font-size: 32px;
+    color: #0047ab;
+  }
+  
+  .rating-section {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  .rating-number {
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+  
+  .rating-number .star {
+    color: gold;
+    margin-left: 5px;
+  }
+  
+  .rating-section p {
+    margin-left: 10px;
+    color: #777;
+  }
+  
+  .playstore-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: black;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .right-section {
+    width: 55%;
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+  }
+  
+  .review-card {
+    min-width: 300px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .review-card h3 {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .user-info p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  
+  .stars {
+    display: flex;
+  }
+  
+  .stars .star {
+    color: gold;
+    font-size: 14px;
+  }
+  
