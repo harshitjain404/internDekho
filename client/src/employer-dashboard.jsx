@@ -9,7 +9,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const EmployerDashboard = () => {
-    
+
   const [isModalOpen, setModalOpen] = useState(false);
   
   const [internships, setInternships] = useState([]);
